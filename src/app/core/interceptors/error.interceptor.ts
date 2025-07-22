@@ -15,7 +15,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         severity: 'error',
         summary: 'Error',
         detail: errorMsg,
-        life: 5000,
+        life: 3000,
       });
 
       return throwError(() => new Error(errorMsg));
