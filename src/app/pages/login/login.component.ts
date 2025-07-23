@@ -27,7 +27,6 @@ import { CardModule } from 'primeng/card';
     CommonModule,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   loginForm!: FormGroup;
@@ -41,7 +40,7 @@ export class LoginComponent {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading.set(true);
     }
