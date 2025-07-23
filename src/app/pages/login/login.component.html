@@ -1,0 +1,80 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <p-card class="w-full max-w-md p-6 shadow-xl rounded-2xl">
+    <div class="text-center mb-6">
+      <h2 class="text-3xl font-bold text-gray-800">Login</h2>
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700"
+          >Email</label
+        >
+        <input
+          pInputText
+          id="email"
+          formControlName="email"
+          type="email"
+          class="w-full mt-1"
+          placeholder="Enter your email"
+          [ngClass]="{
+            'ng-invalid ng-touched':
+              loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+          }"
+        />
+        @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched)
+        {
+        <small class="text-red-500">
+          @if (loginForm.get('email')?.errors?.['required']) { Email is required
+          } @else if (loginForm.get('email')?.errors?.['email']) { Invalid email
+          format }
+        </small>
+        }
+      </div>
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700"
+          >Password</label
+        >
+        <p-password
+          id="password"
+          formControlName="password"
+          class="w-full mt-1"
+          styleClass="w-full"
+          [inputStyle]="{ width: '100%' }"
+          placeholder="Enter your password"
+          [feedback]="false"
+          [ngClass]="{
+            'ng-invalid ng-touched':
+              loginForm.get('password')?.invalid &&
+              loginForm.get('password')?.touched
+          }"
+        ></p-password>
+        @if (loginForm.get('password')?.invalid &&
+        loginForm.get('password')?.touched) {
+        <small class="text-red-500"> Password is required </small>
+        }
+      </div>
+      <div class="flex items-center justify-between">
+        <p-checkbox
+          label="Remember me"
+          formControlName="rememberMe"
+          binary
+          class="text-sm text-gray-600"
+        ></p-checkbox>
+        <a
+          routerLink="/forgot-password"
+          class="text-sm text-blue-600 hover:underline"
+          >Forgot password?</a
+        >
+      </div>
+      <p-button
+        type="submit"
+        label="Sign In"
+        styleClass="w-full bg-blue-600 text-white hover:bg-blue-700"
+        [disabled]="loginForm.invalid"
+      ></p-button>
+    </form>
+    <p class="mt-6 text-center text-sm text-gray-600">
+      Don't have an account?
+      <a routerLink="/signup" class="text-blue-600 hover:underline">Sign up</a>
+    </p>
+  </p-card>
+</div>
