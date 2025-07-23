@@ -5,7 +5,6 @@ import Aura from '@primeng/themes/aura';
 import { provideLottieOptions } from 'ngx-lottie';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-
 import { routes } from './app.routes';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { MessageService } from 'primeng/api';

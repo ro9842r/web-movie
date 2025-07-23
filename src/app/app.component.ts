@@ -1,5 +1,4 @@
-import { MoviesService } from './services/movie.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 
@@ -11,18 +10,6 @@ import { ToastModule } from 'primeng/toast';
     <router-outlet></router-outlet>
   `,
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'web-movie';
-  constructor(private readonly movieService: MoviesService) {}
-
-  ngOnInit() {
-    this.movieService.getGenres().subscribe({
-      next: (res) => {
-        console.log(res);
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
-  }
 }
