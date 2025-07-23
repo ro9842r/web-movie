@@ -18,7 +18,7 @@ import {
   DynamicDialogModule,
   DynamicDialogRef,
 } from 'primeng/dynamicdialog';
-import { SignupComponent } from '../signup/signup.component';
+import { SignupComponent } from '../../components/signup/signup.component';
 
 @Component({
   selector: 'app-login',
