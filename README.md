@@ -1,3 +1,68 @@
+# Movie App
+
+Uma aplicação web para organizar, visualizar e gerenciar listas personalizadas de filmes.
+
+## Funcionalidades
+
+- Autenticação de usuário (login/logout)
+- Criação, visualização e remoção de listas de filmes
+- Adição e remoção de filmes em listas
+- Visualização de detalhes de cada lista
+- Interface moderna e responsiva com PrimeNG e TailwindCSS
+
+## Tecnologias Utilizadas
+
+- Angular standalone components
+- PrimeNG
+- TailwindCSS
+- RxJS Signals
+- API RESTful (backend externo)
+
+## Como rodar o projeto
+
+1. **Instale as dependências:**
+   ```bash
+   npm install
+   ```
+2. **Configure o ambiente:**
+   - Edite o arquivo `src/environments/environment.ts` e defina a URL da sua API:
+     ```typescript
+     export const environment = {
+       apiUrl: "http://sua-api-url.com",
+     };
+     ```
+3. **Inicie o servidor de desenvolvimento:**
+   ```bash
+   npm start
+   ```
+4. **Acesse no navegador:**
+   - http://localhost:4200
+
+## Scripts úteis
+
+- `npm start` — inicia o app em modo desenvolvimento
+- `npm test` — executa os testes unitários
+
+## Estrutura de Pastas
+
+- `src/app/pages/` — páginas principais (login, dashboard, listas)
+- `src/app/components/` — componentes reutilizáveis
+- `src/app/services/` — serviços de acesso à API
+- `src/app/core/guards/` — guards de rota (AuthGuard, PublicGuard)
+- `src/app/core/models/` — interfaces e tipos
+
+## Testes
+
+Os guards e serviços possuem testes unitários em `src/app/core/guards/*.spec.ts` e `src/app/services/*.spec.ts`.
+
+## Contribuição
+
+Pull requests são bem-vindos! Abra uma issue para discutir melhorias ou bugs.
+
+## Licença
+
+MIT
+
 # WebMovie
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.0.
