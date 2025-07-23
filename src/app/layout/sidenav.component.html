@@ -1,0 +1,114 @@
+<aside
+  #sidenav
+  class="bg-green-800 text-white h-screen p-4 w-20 flex flex-col shadow-[5px_0_15px_0_rgba(0,0,0,0.1)] z-10 relative"
+  aria-label="Sidebar"
+>
+  <div class="flex flex-col items-center">
+    <button
+      type="button"
+      aria-label="Toggle"
+      (click)="toggleSidebar()"
+      class="mb-4 cursor-pointer"
+    >
+      <ng-lottie
+        #lottieAnimation
+        [options]="toggleAnimationOptions"
+        (animationCreated)="animationCreated($event)"
+        width="30px"
+        height="30px"
+        class="brightness-0 invert"
+      ></ng-lottie>
+    </button>
+
+    <div class="text-xl font-bold mb-6">
+      <img src="assets/img/logo.png" alt="Delta Logo" class="h-8 w-auto" />
+    </div>
+  </div>
+
+  <hr class="border-t border-gray-100/30 mx-2 my-2" aria-hidden="true" />
+
+  <nav class="flex-1 overflow-y-auto mt-5" aria-label="main navigation">
+    <ul class="menu space-y-1">
+      @for (item of menuItems(); track item['label']) {
+      <li class="mb-2 my-2">
+        @if (item['type'] === 'link') {
+        <a
+          [routerLink]="item['route']"
+          routerLinkActive="bg-green-700/60"
+          pRipple
+          tooltipPosition="right"
+          [pTooltip]="expanded() ? '' : item['label']"
+          class="flex items-center p-2 gap-2 rounded-md hover:bg-green-700/60 cursor-pointer transition-colors font-thin"
+        >
+          <i class="{{ item['icon'] }}   text-center ml-[8px]"></i>
+          <span
+            class="menu-item-label font-thin"
+            [ngClass]="
+              item['type'] === 'link'
+                ? 'ml-[10px]'
+                : item['type'] === 'action'
+                ? 'ml-[8px]'
+                : ''
+            "
+            >{{ item["label"] }}</span
+          >
+        </a>
+        } @else if (item['type'] === 'action') {
+        <button
+          type="button"
+          (click)="item['action'] && item['action']()"
+          pRipple
+          tooltipPosition="right"
+          [pTooltip]="expanded() ? '' : item['label']"
+          class="w-full flex items-center p-2 gap-2 rounded-md hover:bg-green-700/60 cursor-pointer transition-colors font-thin"
+        >
+          <i class="{{ item['icon'] }}   text-center ml-[8px]"></i>
+          <span class="menu-item-label font-thin ml-[10px]">{{
+            item["label"]
+          }}</span>
+        </button>
+        }
+      </li>
+      }
+    </ul>
+  </nav>
+
+  <hr class="border-t border-gray-100/30 mx-2 my-2" aria-hidden="true" />
+
+  <div class="mt-auto pt-2">
+    <a
+      (click)="openLogoutDialog()"
+      [pTooltip]="expanded() ? '' : 'Logout'"
+      pRipple
+      class="w-full flex items-center p-2 gap-2 rounded-md hover:bg-green-700/60 cursor-pointer transition-colors font-thin"
+    >
+      <i class="pi pi-sign-out text-xl w-6 text-center ml-[6px]"></i>
+      <span class="menu-item-label ml-2 font-thin">Logout</span>
+    </a>
+  </div>
+</aside>
+
+<p-dialog
+  header="Confirm Logout"
+  [(visible)]="displayLogoutDialog"
+  [modal]="true"
+  [style]="{ width: '300px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <p>Are you sure you want to log out?</p>
+  <ng-template pTemplate="footer">
+    <p-button
+      label="No"
+      icon="pi pi-times"
+      (onClick)="cancelLogout()"
+      styleClass="p-button-text"
+    ></p-button>
+    <p-button
+      label="Yes"
+      icon="pi pi-check"
+      (onClick)="confirmLogout()"
+      styleClass="p-button-danger"
+    ></p-button>
+  </ng-template>
+</p-dialog>
