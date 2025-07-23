@@ -89,6 +89,19 @@
 </aside>
 
 <p-dialog
+  header="Create New Movie List"
+  [(visible)]="displayCreateMovieListModal"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <app-create-movie-list
+    (movieListCreated)="onMovieListCreated()"
+  ></app-create-movie-list>
+</p-dialog>
+
+<p-dialog
   header="Confirm Logout"
   [(visible)]="displayLogoutDialog"
   [modal]="true"
@@ -112,3 +125,4 @@
     ></p-button>
   </ng-template>
 </p-dialog>
+

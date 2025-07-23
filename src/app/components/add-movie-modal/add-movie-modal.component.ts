@@ -31,6 +31,8 @@ import { FormsModule } from '@angular/forms';
 import { Movie, GenresResponseDto } from '../../core/models/movie.model';
 import { AddMovieToListDto } from '../../core/models/movie-list.model';
 
+import { MessageService } from 'primeng/api';
+
 interface Genre {
   id: number;
   name: string;
@@ -51,6 +53,7 @@ interface Genre {
   ],
   templateUrl: './add-movie-modal.component.html',
   styleUrls: ['./add-movie-modal.component.scss'],
+  providers: [MessageService],
 })
 export class AddMovieModalComponent implements OnInit, OnDestroy {
   @Input() visible = false;
@@ -79,7 +82,8 @@ export class AddMovieModalComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly movieService: MovieService,
-    private readonly movieListService: MovieListService
+    private readonly movieListService: MovieListService,
+    private readonly messageService: MessageService
   ) {
     const currentYear = new Date().getFullYear();
     for (let year = currentYear; year >= 1900; year--) {
@@ -94,6 +98,11 @@ export class AddMovieModalComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error loading genres:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load genres.',
+        });
       },
     });
 
@@ -124,6 +133,11 @@ export class AddMovieModalComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Search/Filter error:', error);
           this.loading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to fetch movies.',
+          });
         },
       });
   }
@@ -162,6 +176,11 @@ export class AddMovieModalComponent implements OnInit, OnDestroy {
       tap((response) => console.log('Search response:', response)),
       catchError((error) => {
         console.error('Search API Error:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Search failed.',
+        });
         return of({ results: [], total_pages: 0, total_results: 0, page: 0 });
       })
     );
@@ -177,6 +196,11 @@ export class AddMovieModalComponent implements OnInit, OnDestroy {
     return this.movieService.discoverMovies(discoverParams).pipe(
       catchError((error) => {
         console.error('Discover API Error:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Discover movies failed.',
+        });
         return of({ results: [], total_pages: 0, total_results: 0, page: 0 });
       })
     );
@@ -209,6 +233,11 @@ export class AddMovieModalComponent implements OnInit, OnDestroy {
   addSelectedMovies(): void {
     if (!this.listId) {
       console.error('List ID is not available.');
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'List ID is missing. Cannot add movies.',
+      });
       return;
     }
 
@@ -225,12 +254,21 @@ export class AddMovieModalComponent implements OnInit, OnDestroy {
       ).subscribe({
         next: (responses) => {
           console.log('Movies added successfully:', responses);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: `${responses.length} movie(s) added to list.`,
+          });
           this.moviesAdded.emit(responses.map((res) => res.movies[0])); // Assuming the response returns the added movie
           this.onClose();
         },
         error: (error) => {
           console.error('Error adding movies:', error);
-          // Handle error (e.g., show a message to the user)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to add movies to list.',
+          });
         },
       });
     } else {
@@ -248,8 +286,8 @@ export class AddMovieModalComponent implements OnInit, OnDestroy {
   handleImageError(event: Event): void {
     const imgElement = event.target as HTMLImageElement;
     // Only attempt to set fallback if it hasn't been set already
-    if (imgElement.src !== '/assets/img/no-poster.jpg') {
-      imgElement.src = '/assets/img/no-poster.jpg';
+    if (imgElement.src !== '/assets/img/default_poster.jpg') {
+      imgElement.src = '/assets/img/default_poster.jpg';
     }
     // Remove the onerror attribute to prevent further calls for this image
     imgElement.onerror = null;

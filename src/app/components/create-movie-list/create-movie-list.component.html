@@ -1,0 +1,93 @@
+<div class="max-w-md mx-auto p-6">
+  <form [formGroup]="movieListForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <!-- List Name -->
+    <div class="space-y-2">
+      <label for="name" class="block text-sm font-medium text-gray-700">
+        List Name <span class="text-red-500">*</span>
+      </label>
+      <input
+        pInputText
+        id="name"
+        formControlName="name"
+        placeholder="Enter list name"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      />
+      <small
+        class="text-red-600 text-xs"
+        *ngIf="
+          movieListForm.get('name')?.invalid &&
+          movieListForm.get('name')?.touched
+        "
+      >
+        Name is required.
+      </small>
+    </div>
+
+    <!-- Description -->
+    <div class="space-y-2">
+      <label for="description" class="block text-sm font-medium text-gray-700">
+        Description <span class="text-red-500">*</span>
+      </label>
+      <textarea
+        pInputTextarea
+        id="description"
+        formControlName="description"
+        rows="3"
+        placeholder="Enter a description for the list"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+      ></textarea>
+      <small
+        class="text-red-600 text-xs"
+        *ngIf="
+          movieListForm.get('description')?.invalid &&
+          movieListForm.get('description')?.touched
+        "
+      >
+        Description is required.
+      </small>
+    </div>
+
+    <!-- Genre -->
+    <div class="space-y-2">
+      <label for="genre" class="block text-sm font-medium text-gray-700">
+        Genre <span class="text-red-500">*</span>
+      </label>
+      <p-dropdown
+        [options]="genres"
+        formControlName="genreId"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Select a genre"
+        [filter]="true"
+        filterBy="name"
+        [showClear]="true"
+        styleClass="w-full"
+        [style]="{ width: '100%' }"
+      ></p-dropdown>
+      <small
+        class="text-red-600 text-xs"
+        *ngIf="
+          movieListForm.get('genreId')?.invalid &&
+          movieListForm.get('genreId')?.touched
+        "
+      >
+        Genre is required.
+      </small>
+    </div>
+
+    <!-- Button -->
+    <div class="pt-4">
+      <button
+        pButton
+        type="submit"
+        label="Create List"
+        [disabled]="movieListForm.invalid"
+        class="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
+        [ngClass]="{
+          'bg-green-600 hover:bg-green-700': !movieListForm.invalid,
+          'bg-gray-300 cursor-not-allowed': movieListForm.invalid
+        }"
+      ></button>
+    </div>
+  </form>
+</div>

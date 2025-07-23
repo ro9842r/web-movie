@@ -1,0 +1,89 @@
+/* Custom styles for Create Movie List component */
+
+/* PrimeNG Input customization */
+::ng-deep .p-inputtext {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+}
+
+::ng-deep .p-inputtextarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  resize: none;
+  transition: all 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+}
+
+/* PrimeNG Dropdown customization */
+::ng-deep .p-dropdown {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
+
+  .p-dropdown-label {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .p-dropdown-trigger {
+    background-color: #f9fafb;
+  }
+
+  &:not(.p-disabled):hover {
+    border-color: #9ca3af;
+  }
+
+  &:not(.p-disabled).p-focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+}
+
+/* PrimeNG Button customization */
+::ng-deep .p-button {
+  width: 100%;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+  border: none;
+
+  &:not(.p-disabled) {
+    background-color: #059669;
+    color: white;
+
+    &:hover {
+      background-color: #047857;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.3);
+    }
+  }
+
+  &.p-disabled {
+    background-color: #d1d5db;
+    color: #6b7280;
+    cursor: not-allowed;
+  }
+}

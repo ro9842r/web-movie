@@ -22,6 +22,7 @@ import { MenuItem } from 'primeng/api';
 import { LottieAnimationService } from '../services/lottie-animation.service';
 import { createSidebarAnimationTimeline } from '../core/animations/gsap-animations';
 import { AuthService } from '../core/services/auth.service';
+import { CreateMovieListComponent } from '../components/create-movie-list/create-movie-list.component';
 
 @Component({
   selector: 'app-sidenav',
@@ -35,6 +36,7 @@ import { AuthService } from '../core/services/auth.service';
     NgClass,
     DialogModule,
     ButtonModule,
+    CreateMovieListComponent,
   ],
   templateUrl: './sidenav.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,8 +47,7 @@ export class SidenavComponent {
 
   expanded = signal(false);
   displayLogoutDialog = signal(false);
-
-  @Output() openCreateMovieListModal = new EventEmitter<void>();
+  displayCreateMovieListModal = signal(false);
 
   toggleAnimationOptions: AnimationOptions = {
     path: '/assets/animations/sidenav-toggle.json',
@@ -65,47 +66,15 @@ export class SidenavComponent {
 
   menuItems = signal<MenuItem[]>([
     {
-      label: 'Dashboard',
-      icon: 'pi pi-th-large',
-      route: 'dashboard',
-      type: 'link',
-    },
-
-    { label: 'Profile', icon: 'pi pi-user', route: 'profile', type: 'link' },
-    {
-      label: 'Settings',
-      icon: 'pi pi-cog',
-      route: 'settings',
-      type: 'settings',
-    },
-    {
-      label: 'Movies',
-      icon: 'pi pi-video',
-      route: 'movies',
-      type: 'link',
-    },
-    {
-      label: 'Movie Releases',
-      icon: 'pi pi-video',
-      route: 'movies-releases',
-      type: 'link',
-    },
-    {
-      label: 'Minhas Listas',
-      icon: 'pi pi-list',
-      route: 'my-movie-lists',
-      type: 'link',
-    },
-    {
-      label: 'Create Movie List',
+      label: 'Add',
       icon: 'pi pi-plus',
       type: 'action',
       action: () => {
-        this.openCreateMovieListModal.emit();
+        this.displayCreateMovieListModal.set(true);
       },
     },
     {
-      label: 'My Movie Lists',
+      label: ' Lists',
       icon: 'pi pi-list',
       route: 'my-movie-lists',
       type: 'link',
@@ -178,5 +147,9 @@ export class SidenavComponent {
   onSettingsMouseLeave(): void {
     this.lottieAnimationService.stop('settingsIcon');
     this.lottieAnimationService.goToAndStop('settingsIcon', 0, true);
+  }
+
+  onMovieListCreated(): void {
+    this.displayCreateMovieListModal.set(false);
   }
 }

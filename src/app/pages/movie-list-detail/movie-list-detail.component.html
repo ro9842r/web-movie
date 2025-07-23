@@ -10,16 +10,7 @@
     ></button>
   </div>
 
-  @if (loading()) {
-  <div class="flex justify-center items-center py-12">
-    <div class="text-center">
-      <div
-        class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"
-      ></div>
-      <p class="text-gray-500">Loading list...</p>
-    </div>
-  </div>
-  } @else if (error()) {
+  @if(error()) {
   <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
     <div class="text-red-600">
       <i class="pi pi-exclamation-triangle text-2xl mb-2"></i>
@@ -27,7 +18,7 @@
     </div>
   </div>
   } @else if (movieList()) {
-  <div class="space-y-6">
+  <div class="flex flex-col space-y-6">
     <!-- Header -->
     <div class="bg-white rounded-xl shadow-lg p-6">
       <div class="flex items-start justify-between mb-4">
@@ -50,15 +41,16 @@
             </span>
           </div>
         </div>
-        <button
-          pButton
-          label="Add Movie"
-          icon="pi pi-plus"
-          class="bg-green-600 hover:bg-green-700"
-          (click)="openAddMovieModal()"
-        ></button>
       </div>
     </div>
+    <br />
+    <button
+      pButton
+      label="Add Movie"
+      icon="pi pi-plus"
+      class="bg-green-600 hover:bg-green-700"
+      (click)="openAddMovieModal()"
+    ></button>
 
     @if (movieList()!.movies.length > 0) {
     <!-- Movies Grid -->
