@@ -19,6 +19,8 @@ import {
   DynamicDialogRef,
 } from 'primeng/dynamicdialog';
 import { SignupComponent } from '../../components/signup/signup.component';
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -45,12 +47,13 @@ export class LoginComponent {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly dialogService: DialogService
+    private readonly dialogService: DialogService,
+    private readonly authService: AuthService,
+    private readonly router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
-      rememberMe: [false],
     });
   }
 
@@ -64,7 +67,22 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      this.isLoading.set(true);
+      const { email, password } = this.loginForm.value;
+      this.authService
+        .login({
+          email,
+          password,
+        })
+        .subscribe({
+          next: (response) => {
+            console.log('Login successful', response);
+            this.router.navigate(['/dashboard']);
+          },
+          error: (error) => {
+            // Handle login error
+            this.isLoading.set(false);
+          },
+        });
     }
   }
 }
