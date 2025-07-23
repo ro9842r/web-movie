@@ -1,3 +1,4 @@
+import { DialogModule } from 'primeng/dialog';
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -12,6 +13,12 @@ import { PasswordModule } from 'primeng/password';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import {
+  DialogService,
+  DynamicDialogModule,
+  DynamicDialogRef,
+} from 'primeng/dynamicdialog';
+import { SignupComponent } from '../signup/signup.component';
 
 @Component({
   selector: 'app-login',
@@ -25,18 +32,33 @@ import { CardModule } from 'primeng/card';
     ReactiveFormsModule,
     InputTextModule,
     CommonModule,
+    DialogModule,
+    DynamicDialogModule,
   ],
   templateUrl: './login.component.html',
+  providers: [DialogService],
 })
 export class LoginComponent {
   loginForm!: FormGroup;
   isLoading = signal(false);
+  ref: DynamicDialogRef | undefined;
 
-  constructor(private readonly fb: FormBuilder) {
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly dialogService: DialogService
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
       rememberMe: [false],
+    });
+  }
+
+  openDialogCreateAccount(): void {
+    this.ref = this.dialogService.open(SignupComponent, {
+      width: '50vw',
+      closable: true,
+      modal: true,
     });
   }
 
