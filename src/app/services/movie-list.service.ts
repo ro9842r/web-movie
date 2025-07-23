@@ -20,4 +20,11 @@ export class MovieListService {
       .post<ApiResponse<MovieListDto>>(`${this.apiUrl}`, dto)
       .pipe(map(({ data }) => data));
   }
+
+  getAllMovieLists(): Observable<ApiResponse<any>> {
+    return this.http
+      .get<any>(this.apiUrl)
+      .pipe()
+      .pipe(map((res) => res));
+  }
 }

@@ -1,0 +1,121 @@
+<div class="max-w-7xl mx-auto p-6 sm:p-8">
+  <header class="mb-10">
+    <h1 class="text-4xl font-bold text-gray-900 mb-3">My Movie Lists</h1>
+    <p class="text-lg text-gray-600">
+      Organize and discover your personalized movie collections
+    </p>
+  </header>
+
+  <!-- Error State -->
+  <div
+    *ngIf="error"
+    class="bg-red-50 border border-red-300 rounded-xl p-8 text-center"
+  >
+    <div class="text-red-700">
+      <i class="pi pi-exclamation-triangle text-3xl mb-3"></i>
+      <p class="text-xl font-medium">{{ error }}</p>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div
+    *ngIf="!loading && !error && movieLists.length === 0"
+    class="text-center py-20 bg-gray-50 rounded-xl"
+  >
+    <div class="text-gray-400 mb-6">
+      <i class="pi pi-list text-7xl"></i>
+    </div>
+    <h3 class="text-2xl font-semibold text-gray-800 mb-3">No Lists Found</h3>
+    <p class="text-gray-600 text-lg mb-6">
+      You haven't created any movie lists yet.
+    </p>
+    <p class="text-gray-500 text-sm">
+      Click "Create Movie List" in the sidebar to get started!
+    </p>
+  </div>
+
+  <!-- Movie Lists Grid -->
+  <div
+    *ngIf="!loading && !error && movieLists.length > 0"
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+  >
+    <div
+      *ngFor="let list of movieLists"
+      class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-[420px] min-h-[420px]"
+    >
+      <!-- Header -->
+      <div class="p-6 flex-1 flex flex-col">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
+          {{ list.name }}
+        </h3>
+        <p class="text-gray-600 text-sm line-clamp-3 mb-4">
+          {{ list.description || "No description available" }}
+        </p>
+        <!-- Meta Info -->
+        <div
+          class="flex items-center justify-between text-sm text-gray-500 mb-4"
+        >
+          <span class="flex items-center gap-2">
+            <i class="pi pi-tag text-base"></i>
+            {{ list.genreName || "No genre" }}
+          </span>
+          <span class="flex items-center gap-2">
+            <i class="pi pi-film text-base"></i>
+            {{ list.movies.length }} movie(s)
+          </span>
+        </div>
+        <!-- Movie Previews -->
+        <div class="mt-2">
+          <div *ngIf="list.movies.length === 0" class="text-center py-8">
+            <div class="text-gray-300 mb-3">
+              <i class="pi pi-film text-4xl"></i>
+            </div>
+            <p class="text-gray-500 text-sm">No movies added</p>
+          </div>
+          <div
+            *ngIf="list.movies.length > 0"
+            class="flex flex-wrap gap-3 min-h-[80px]"
+          >
+            <div
+              *ngFor="let movie of list.movies | slice : 0 : 4"
+              class="w-14 h-20 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0 shadow-sm"
+            >
+              <img
+                *ngIf="movie.movieDetails?.poster_path"
+                [src]="
+                  'https://image.tmdb.org/t/p/w92/' +
+                  movie.movieDetails.poster_path
+                "
+                [alt]="movie.movieDetails?.title || 'Movie Poster'"
+                class="w-full h-full object-cover"
+              />
+              <div
+                *ngIf="!movie.movieDetails?.poster_path"
+                class="w-full h-full flex items-center justify-center text-sm text-gray-400 bg-gray-300"
+              >
+                <i class="pi pi-image"></i>
+              </div>
+            </div>
+            <div
+              *ngIf="list.movies.length > 4"
+              class="w-14 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600 text-sm font-medium border-2 border-dashed border-gray-300"
+            >
+              +{{ list.movies.length - 4 }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="p-6 pt-0">
+        <button
+          pButton
+          label="View Details"
+          [routerLink]="['/movie-lists', list.id]"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-4 rounded-lg transition-colors duration-200 text-sm font-medium"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+        ></button>
+      </div>
+    </div>
+  </div>
+</div>

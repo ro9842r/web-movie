@@ -3,7 +3,6 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { PublicGuard } from './core/guards/public.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
     title: 'Movie App | Login',
@@ -20,4 +19,14 @@ export const routes: Routes = [
         (m) => m.DashboardComponent
       ),
   },
+  {
+    path: 'my-movie-lists',
+    title: 'Movie App | My Movie Lists',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import(
+        './pages/movie-lists-overview/movie-lists-overview.component'
+      ).then((m) => m.MovieListsOverviewComponent),
+  },
+  { path: '**', redirectTo: '/login', pathMatch: 'full' },
 ];

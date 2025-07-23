@@ -19,3 +19,19 @@ export interface MovieListDto {
   userId: string;
   movies: Array<Movie>;
 }
+export interface MovieListResponse {
+  statusCode: number;
+  message: string;
+  data: {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    name: string;
+    description: string;
+    genreId: number;
+    genreName: string;
+    userId: string;
+    movies: any[];
+  };
+}
