@@ -15,9 +15,9 @@ export const routes: Routes = [
     title: 'Dashboard',
     canActivate: [AuthGuard],
     loadComponent: () =>
-      import('./pages/dashboard/dashboard.component').then(
-        (m) => m.DashboardComponent
-      ),
+      import(
+        './pages/movie-lists-overview/movie-lists-overview.component'
+      ).then((m) => m.MovieListsOverviewComponent),
   },
   {
     path: 'my-movie-lists',
