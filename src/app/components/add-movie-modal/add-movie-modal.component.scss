@@ -1,0 +1,71 @@
+.add-movie-modal {
+  .p-dialog-content {
+    padding: 1rem;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .grid {
+    display: grid;
+  }
+
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  @media (min-width: 640px) {
+    .sm\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 768px) {
+    .md\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .lg\:grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .min-w-48 {
+    min-width: 12rem;
+  }
+
+  .h-48 {
+    height: 12rem;
+  }
+
+  .h-64 {
+    height: 16rem;
+  }
+
+  .h-80 {
+    height: 20rem;
+  }
+
+  .w-6 {
+    width: 1.5rem;
+  }
+
+  .h-6 {
+    height: 1.5rem;
+  }
+}

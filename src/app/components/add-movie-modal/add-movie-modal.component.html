@@ -1,0 +1,194 @@
+<p-dialog
+  [modal]="true"
+  [visible]="visible"
+  (onHide)="onClose()"
+  header="Adicionar Filme à Lista"
+  [style]="{ width: '90vw', maxWidth: '800px', height: '80vh' }"
+  [resizable]="false"
+  styleClass="add-movie-modal"
+>
+  <div class="flex flex-col h-full">
+    <!-- Barra de Pesquisa -->
+    <div class="mb-4">
+      <div class="p-inputgroup">
+        <input
+          type="text"
+          pInputText
+          placeholder="Buscar filmes..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearchInput($event)"
+          class="w-full"
+        />
+        <button
+          pButton
+          icon="pi pi-search"
+          class="p-button-outlined"
+          (click)="searchMovies()"
+        ></button>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="mb-4 flex flex-wrap gap-3">
+      <div class="flex-1 min-w-48">
+        <label for="genre-dropdown" class="block text-sm font-medium mb-1"
+          >Gênero</label
+        >
+        <p-dropdown
+          id="genre-dropdown"
+          [options]="genres"
+          [(ngModel)]="selectedGenre"
+          placeholder="Todos os gêneros"
+          optionLabel="name"
+          optionValue="id"
+          [showClear]="true"
+          (onChange)="onGenreChange()"
+          class="w-full"
+        >
+        </p-dropdown>
+      </div>
+
+      <div class="flex-1 min-w-48">
+        <label for="year-dropdown" class="block text-sm font-medium mb-1"
+          >Ano</label
+        >
+        <p-dropdown
+          id="year-dropdown"
+          [options]="years"
+          [(ngModel)]="selectedYear"
+          placeholder="Todos os anos"
+          [showClear]="true"
+          (onChange)="onYearChange()"
+          class="w-full"
+        >
+        </p-dropdown>
+      </div>
+
+      <div class="flex items-end">
+        <button
+          pButton
+          label="Descobrir Filmes"
+          icon="pi pi-compass"
+          class="p-button-outlined"
+          (click)="discoverMoviesTrigger()"
+        ></button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="flex justify-center items-center py-8">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+
+    <!-- Resultados -->
+    <div *ngIf="!loading" class="flex-1 overflow-auto">
+      <div
+        *ngIf="movies?.length === 0 && !isInitialState"
+        class="text-center py-8 text-gray-500"
+      >
+        Nenhum filme encontrado
+      </div>
+
+      <div *ngIf="isInitialState" class="text-center py-8 text-gray-500">
+        Digite para buscar filmes ou use "Descobrir Filmes" para ver sugestões
+      </div>
+
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
+        <div
+          *ngFor="let movie of movies"
+          class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border-2 border-transparent hover:border-blue-500 h-80"
+          (click)="selectMovie(movie)"
+          [class.border-green-500]="selectedMovies.has(movie.id)"
+          [class.bg-green-50]="selectedMovies.has(movie.id)"
+        >
+          <div class="relative">
+            <img
+              [src]="getMoviePosterUrl(movie.poster_path)"
+              [alt]="movie.title"
+              class="w-full h-48 object-cover"
+            />
+
+            <div
+              *ngIf="selectedMovies.has(movie.id)"
+              class="absolute top-2 right-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+            >
+              <i class="pi pi-check text-xs"></i>
+            </div>
+          </div>
+
+          <div class="p-3">
+            <h3
+              class="font-semibold text-sm mb-1 line-clamp-2"
+              [title]="movie.title"
+            >
+              {{ movie.title }}
+            </h3>
+            <p class="text-xs text-gray-600 mb-2">
+              {{
+                movie.release_date
+                  ? (movie.release_date | date : "yyyy")
+                  : "Sem data"
+              }}
+            </p>
+            <p
+              class="text-xs text-gray-500 mb-2 line-clamp-3"
+              [title]="movie.overview"
+            >
+              {{ movie.overview || "Sem descrição disponível" }}
+            </p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center text-xs text-gray-500">
+                <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                <span>{{ movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A' }}</span>
+              </div>
+              <span class="text-xs text-gray-500">
+                {{ movie.vote_count }} votos
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paginação -->
+      <div
+        *ngIf="movies && movies.length > 0 && totalPages > 1"
+        class="mt-4 flex justify-center"
+      >
+        <p-paginator
+          [rows]="20"
+          [totalRecords]="totalResults"
+          [first]="(currentPage - 1) * 20"
+          (onPageChange)="onPageChange($event)"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Página {currentPage} de {totalPages}"
+        ></p-paginator>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-between items-center">
+      <span *ngIf="selectedMovies.size > 0" class="text-sm text-gray-600">
+        {{ selectedMovies.size }} filme(s) selecionado(s)
+      </span>
+      <div class="flex gap-2">
+        <button
+          pButton
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="onClose()"
+        ></button>
+        <button
+          pButton
+          label="Adicionar Selecionados"
+          icon="pi pi-plus"
+          [disabled]="selectedMovies.size === 0"
+          (click)="addSelectedMovies()"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

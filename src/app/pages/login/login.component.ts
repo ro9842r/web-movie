@@ -67,6 +67,7 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
+      this.isLoading.set(true);
       const { email, password } = this.loginForm.value;
       this.authService
         .login({
@@ -74,8 +75,7 @@ export class LoginComponent {
           password,
         })
         .subscribe({
-          next: (response) => {
-            console.log('Login successful', response);
+          next: () => {
             this.router.navigate(['/dashboard']);
           },
           error: (error) => {

@@ -18,7 +18,7 @@ export class MovieService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/movies`;
 
-  getGenres(): Observable<GenresResponseDto> {
+  getMovieGenres(): Observable<GenresResponseDto> {
     return this.http
       .get<ApiResponse<GenresResponseDto>>(`${this.apiUrl}/genres`)
       .pipe(map(({ data }) => data));

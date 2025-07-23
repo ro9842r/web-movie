@@ -1,1 +1,29 @@
-/* No custom styles needed, relying on PrimeNG and Tailwind CSS */
+:host {
+  display: block;
+  background-color: #f9fafb; // A very light gray background
+  min-height: 100vh;
+}
+
+// Style for PrimeNG buttons if custom styling is needed beyond Tailwind classes
+.p-button-primary {
+  background-color: #166534 !important; // Tailwind's green-800
+  border-color: #166534 !important;
+
+  &:hover {
+    background-color: #15803d !important; // Tailwind's green-700
+    border-color: #15803d !important;
+  }
+}
+
+// Custom animation for the poster stack on hover
+.group:hover {
+  .rotate-\[-12deg\] {
+    transform: rotate(-6deg) scale(1.05) translateX(-5px);
+  }
+  .rotate-\[12deg\] {
+    transform: rotate(6deg) scale(1.05) translateX(5px);
+  }
+  .z-10 {
+    transform: scale(1.12);
+  }
+}

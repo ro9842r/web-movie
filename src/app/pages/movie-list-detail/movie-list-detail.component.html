@@ -1,0 +1,147 @@
+<div class="max-w-6xl mx-auto p-6">
+  <!-- Back Button -->
+  <div class="mb-4">
+    <button
+      pButton
+      label="Back"
+      icon="pi pi-arrow-left"
+      class="p-button-text"
+      routerLink="/my-movie-lists"
+    ></button>
+  </div>
+
+  @if (loading()) {
+  <div class="flex justify-center items-center py-12">
+    <div class="text-center">
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"
+      ></div>
+      <p class="text-gray-500">Loading list...</p>
+    </div>
+  </div>
+  } @else if (error()) {
+  <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+    <div class="text-red-600">
+      <i class="pi pi-exclamation-triangle text-2xl mb-2"></i>
+      <p class="text-lg font-medium">{{ error() }}</p>
+    </div>
+  </div>
+  } @else if (movieList()) {
+  <div class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <div class="flex items-start justify-between mb-4">
+        <div class="flex-1">
+          <h1 class="text-3xl font-bold text-gray-800 mb-2">
+            {{ movieList()!.name }}
+          </h1>
+          <p class="text-gray-600 mb-3">{{ movieList()!.description }}</p>
+          <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+            <span class="flex items-center gap-1">
+              <i class="pi pi-tag"></i> {{ movieList()!.genreName }}
+            </span>
+            <span class="flex items-center gap-1">
+              <i class="pi pi-calendar"></i>
+              Created on {{ movieList()!.createdAt | date : "dd/MM/yyyy" }}
+            </span>
+            <span class="flex items-center gap-1">
+              <i class="pi pi-film"></i>
+              {{ movieList()!.movies.length }} movie(s)
+            </span>
+          </div>
+        </div>
+        <button
+          pButton
+          label="Add Movie"
+          icon="pi pi-plus"
+          class="bg-green-600 hover:bg-green-700"
+          (click)="openAddMovieModal()"
+        ></button>
+      </div>
+    </div>
+
+    @if (movieList()!.movies.length > 0) {
+    <!-- Movies Grid -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Movies in List</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        @for (movie of movieList()!.movies; track movie.id) {
+        <div
+          class="relative bg-gray-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-200 group"
+        >
+          <!-- Delete Button -->
+          <div
+            class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <button
+              pButton
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger p-button-text"
+              (click)="confirmMovieRemoval(movie.movieDetails.id)"
+            ></button>
+          </div>
+
+          <div class="aspect-[2/3] bg-gray-200">
+            @if (movie.movieDetails?.poster_path) {
+            <img
+              [src]="
+                'https://image.tmdb.org/t/p/w300/' +
+                movie.movieDetails.poster_path
+              "
+              [alt]="movie.movieDetails?.title || 'Movie Poster'"
+              class="w-full h-full object-cover"
+            />
+            } @else {
+            <div
+              class="w-full h-full flex items-center justify-center text-gray-400"
+            >
+              <i class="pi pi-image text-3xl"></i>
+            </div>
+            }
+          </div>
+
+          <div class="p-3">
+            <h3 class="font-medium text-sm text-gray-800 truncate">
+              {{ movie.movieDetails?.title || movie.title || "Untitled" }}
+            </h3>
+            <p class="text-xs text-gray-500 mt-1">
+              {{
+                (movie.movieDetails?.release_date | date : "yyyy") ||
+                  "Year not available"
+              }}
+            </p>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    } @else {
+    <div class="bg-white rounded-xl shadow-lg p-12 text-center">
+      <div class="text-gray-400 mb-4">
+        <i class="pi pi-film text-6xl"></i>
+      </div>
+      <h3 class="text-xl font-medium text-gray-700 mb-2">This list is empty</h3>
+      <p class="text-gray-500 mb-6">
+        Start by adding some movies to your list.
+      </p>
+      <button
+        pButton
+        label="Add First Movie"
+        icon="pi pi-plus"
+        class="bg-blue-600 hover:bg-blue-700"
+        (click)="openAddMovieModal()"
+      ></button>
+    </div>
+    }
+  </div>
+  }
+</div>
+
+<app-add-movie-modal
+  [visible]="showAddMovieModal()"
+  [listId]="movieList()?.id || null"
+  (visibleChange)="showAddMovieModal.set($event)"
+  (moviesAdded)="onMoviesAdded($event)"
+></app-add-movie-modal>
+
+<p-confirmDialog></p-confirmDialog>

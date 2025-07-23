@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MovieListService } from '../../services/movie-list.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { MovieListResponse } from '../../core/models/movie-list.model';
+import { Subject, filter, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-movie-lists-overview',
@@ -20,15 +21,29 @@ import { MovieListResponse } from '../../core/models/movie-list.model';
   templateUrl: './movie-lists-overview.component.html',
   styleUrls: ['./movie-lists-overview.component.scss'],
 })
-export class MovieListsOverviewComponent implements OnInit {
+export class MovieListsOverviewComponent implements OnInit, OnDestroy {
   movieLists: MovieListResponse['data'][] = [];
   loading = true;
   error: string | null = null;
 
-  constructor(private readonly movieListService: MovieListService) {}
+  private destroy$ = new Subject<void>();
+
+  constructor(private readonly movieListService: MovieListService, private readonly router: Router) {}
 
   ngOnInit(): void {
     this.loadMovieLists();
+
+    this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.loadMovieLists();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadMovieLists(): void {

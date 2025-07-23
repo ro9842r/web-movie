@@ -7,6 +7,16 @@ export interface CreateMovieListDto {
   genreName: string;
 }
 
+export interface AddMovieToListDto {
+  listId: string;
+  movieId: number;
+}
+
+export interface RemoveMovieFromListDto {
+  listId: string;
+  movieId: number;
+}
+
 export interface MovieListDto {
   id: string;
   createdAt: string;
@@ -35,3 +45,4 @@ export interface MovieListResponse {
     movies: any[];
   };
 }
+

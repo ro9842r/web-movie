@@ -28,5 +28,15 @@ export const routes: Routes = [
         './pages/movie-lists-overview/movie-lists-overview.component'
       ).then((m) => m.MovieListsOverviewComponent),
   },
+
+  {
+    path: 'movie-lists/:id',
+    title: 'Movie List Detail',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./pages/movie-list-detail/movie-list-detail.component').then(
+        (m) => m.MovieListDetailComponent
+      ),
+  },
   { path: '**', redirectTo: '/login', pathMatch: 'full' },
 ];
