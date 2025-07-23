@@ -24,7 +24,6 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
     CardModule,
   ],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss',
 })
 export class SignupComponent {
   signupForm!: FormGroup;
